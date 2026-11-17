@@ -1,0 +1,48 @@
+# Push a tag such as v1.2.0 and this builds <id>-1.2.0.zip and publishes it as a GitHub release.
+# The zip holds the mod's folder (<id>/mod.json, <id>/init.lua, ...), ready to extract into the
+# game's mods folder. Files marked export-ignore in .gitattributes stay out of it.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag against mod.json
+        id: mod
+        run: |
+          id=$(jq -r '.id // empty' mod.json)
+          [ -n "$id" ] || id="${GITHUB_REPOSITORY#*/}"
+          version=$(jq -r '.version // empty' mod.json)
+          if [ "${GITHUB_REF_NAME#v}" != "$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match version \"$version\" in mod.json"
+            exit 1
+          fi
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "name=$(jq -r --arg id "$id" '.name // $id' mod.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Zip the mod folder
+        run: git archive --format=zip --prefix="${{ steps.mod.outputs.id }}/" -o "${{ steps.mod.outputs.id }}-${{ steps.mod.outputs.version }}.zip" HEAD
+
+      - name: Release notes from CHANGELOG.md
+        run: |
+          awk -v v="${{ steps.mod.outputs.version }}" '/^## / { p = ($2 == v); next } p' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "See CHANGELOG.md." > notes.md
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME"
+          "${{ steps.mod.outputs.id }}-${{ steps.mod.outputs.version }}.zip"
+          --title "${{ steps.mod.outputs.name }} ${{ steps.mod.outputs.version }}"
+          --notes-file notes.md

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://rq-modding.github.io/rq-modding-docs/schemas/mod.schema.json",
+  "id": "world3-no-cap",
+  "name": "World 3 No Level Cap",
+  "author": "Moru Zerinho6",
+  "version": "1.0.0",
+  "loader": "2.56.1",
+  "priority": 0
+}
