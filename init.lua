@@ -9,7 +9,6 @@
 -- then answers 2147483647, which the cards and the status page show as ∞. Rance's data asks for 9999,
 -- but ＣＬＶ最大 writes at most 999 outside World 3 (9999 in it), and he is made in World 1: his level
 -- stops at 999.
--- notes/plans/plan-world3-no-cap.md in the workspace.
 
 local CAP = "ＣＬＶ最大"
 local UNCAPPED = "キャラ_レベル上限なし"

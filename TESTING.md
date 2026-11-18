@@ -27,8 +27,8 @@ No other `rq.agent.control` ids. Do not invent controls for it.
 and `cap` (999, Rance's). Put back what you set: the box stays in the save. The Lab's
 `t.world(3)` sets the world for what reads it, which is all the mod reads.
 
-## Test Lab
+## Tested in the game
 
-`test-lab/scenarios/world3-no-cap.lua`: the cap read in each world and with the box off, ∞, EXP and
+The Test Lab's scenario `world3-no-cap`: the cap read in each world and with the box off, ∞, EXP and
 levels past the cap from a fight and from `rq.chara.add_exp`, Athena 2.0, a Forbidden Talent's
 raise, the page.
