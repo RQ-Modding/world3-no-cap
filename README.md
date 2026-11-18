@@ -1,6 +1,7 @@
 # World 3 No Level Cap
 
 In World 3, no recruited character has a level cap, as Rance has none.
+<img width="1024" height="768" alt="image" src="https://github.com/user-attachments/assets/5a3d7602-d3f0-4245-b222-78267db327e1" />
 
 ## What it changes
 
